@@ -1,50 +1,47 @@
 package Controller;
 
-import DAO.CategoriasDAO;
-import DAO.LibrosDAO;
-import Model.Categoria;
+import Model.Data.DAO.LibroDAO;
+import Model.Data.DBConnector;
+import Model.Data.DBGenerator;
 import Model.Libro;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jooq.DSLContext;
+
 import java.io.IOException;
 
-@WebServlet("/LibrosServlet")
+@WebServlet
 public class LibrosServlet extends HttpServlet {
-    private LibrosDAO librosDAO;
-
-    public void init() {
-        librosDAO = new LibrosDAO();
-        librosDAO.init();
-    }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Lógica para manejar las solicitudes POST, como agregar libros y categorías
-
-       /* ESTO ES UN INTENTO DE AGREGAR UNA CATEGORIA A MI BASE DE DATOS
-        String nombreCategoria = request.getParameter("nombreCategoria");
-        Categoria categoria = new Categoria();
-        categoria.setNombreCategoria(nombreCategoria);
-        CategoriasDAO categoriasDAO = new CategoriasDAO();
-        categoriasDAO.agregarCategoria(categoria);
-        response.sendRedirect("agregarCat.jsp");*/
-
-        String nombre = request.getParameter("nombre");
-        String editorial = request.getParameter("editorial");
+        String nombreLibro = request.getParameter("nombre");
         int ano = Integer.parseInt(request.getParameter("ano"));
         String tipoLibro = request.getParameter("tipo_libro");
+        String editorial = request.getParameter("editorial");
         int estado = Integer.parseInt(request.getParameter("estado"));
-        int idCategoria = Integer.parseInt(request.getParameter("id_categoria"));
+        int id_categoria = Integer.parseInt(request.getParameter("id_categoria"));
 
-        Libro libro = new Libro(nombre, editorial, ano, tipoLibro, estado, idCategoria);
+        Libro libro = new Libro(0, nombreLibro,ano,tipoLibro,editorial,estado,id_categoria); // El id se generará automáticamente en la base de datos
 
-        LibrosDAO librosDAO = new LibrosDAO();
-        librosDAO.agregarLibro(libro);
+        try {
+            // Obtener la instancia DSLContext para interactuar con la base de datos
+            DSLContext create = DBGenerator.conectarBD("biblioteca");
 
-        response.sendRedirect("agregarCat.jsp");
+            // Agregar la categoría a la base de datos
+            LibroDAO.agregarLibro(create, libro);
 
+            // Cerrar la conexión a la base de datos
+            DBConnector.closeConnection();
+
+            // Redireccionar a una página de éxito o mostrar un mensaje de éxito
+            response.sendRedirect("exito.jsp");
+        } catch (ClassNotFoundException e) {
+            // Manejar la excepción
+            e.printStackTrace();
+            response.sendRedirect("error.jsp");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

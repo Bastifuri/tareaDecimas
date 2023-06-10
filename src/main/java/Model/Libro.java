@@ -9,18 +9,16 @@ public class Libro {
     private int estado;
     private int id_categoria;
 
-    public Libro(int id_libro, String nombre, String editorial, String tipo_libro, int ano, int estado, int id_categoria) {
-        this.id_libro = id_libro;
-        this.nombre = nombre;
-        this.editorial = editorial;
-        this.tipo_libro = tipo_libro;
+    public Libro(int idLibro, String nombreLibro, int ano, String tipoLibro, String editorial, int estado, int idCategoria) {
+        this.id_libro = idLibro;
+        this.nombre = nombreLibro;
         this.ano = ano;
+        this.tipo_libro = tipoLibro;
+        this.editorial = editorial;
         this.estado = estado;
-        this.id_categoria = id_categoria;
+        this.id_categoria = idCategoria;
     }
 
-    public Libro(String nombre, String editorial, int ano, String tipoLibro, int estado, int idCategoria) {
-    }
 
     public int getId_libro() {
         return id_libro;
