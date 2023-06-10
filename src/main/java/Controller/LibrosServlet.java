@@ -26,16 +26,15 @@ public class LibrosServlet extends HttpServlet {
         Libro libro = new Libro(0, nombreLibro,ano,tipoLibro,editorial,estado,id_categoria); // El id se generará automáticamente en la base de datos
 
         try {
-            // Obtener la instancia DSLContext para interactuar con la base de datos
+            // conexion a la bd
             DSLContext create = DBGenerator.conectarBD("biblioteca");
 
-            // Agregar la categoría a la base de datos
+            // Agregar la categoría a la bd
             LibroDAO.agregarLibro(create, libro);
 
-            // Cerrar la conexión a la base de datos
             DBConnector.closeConnection();
 
-            // Redireccionar a una página de éxito o mostrar un mensaje de éxito
+            // Redireccionar a una página de éxito
             response.sendRedirect("exito.jsp");
         } catch (ClassNotFoundException e) {
             // Manejar la excepción

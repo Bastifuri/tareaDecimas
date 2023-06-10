@@ -20,26 +20,24 @@ public class CategoriaServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Obtener los parámetros enviados desde el formulario
+        // Obtener los parámetros enviados desde el index
         String nombreCategoria = request.getParameter("nombreCategoria");
 
         // Crear una instancia de la categoría
-        Categoria categoria = new Categoria(0, nombreCategoria); // El id se generará automáticamente en la base de datos
+        Categoria categoria = new Categoria(0, nombreCategoria); //Aqui es para que el id se genere automaticamente
 
         try {
-            // Obtener la instancia DSLContext para interactuar con la base de datos
+            // Aqui es para conectarse a la bd
             DSLContext create = DBGenerator.conectarBD("biblioteca");
 
-            // Agregar la categoría a la base de datos
+            // Agregar la categoría a la bd
             CategoriaDAO.agregarCat(create, categoria);
 
-            // Cerrar la conexión a la base de datos
             DBConnector.closeConnection();
 
-            // Redireccionar a una página de éxito o mostrar un mensaje de éxito
+            // Redirecciono a una pagina de exito estandar
             response.sendRedirect("exito.jsp");
         } catch (ClassNotFoundException e) {
-            // Manejar la excepción
             e.printStackTrace();
             response.sendRedirect("error.jsp");
         }
@@ -47,7 +45,7 @@ public class CategoriaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Obtener la instancia DSLContext para interactuar con la base de datos
+            //conexion a la bd
             DSLContext create = DBGenerator.conectarBD("biblioteca");
 
             // Obtener la lista de categorías
