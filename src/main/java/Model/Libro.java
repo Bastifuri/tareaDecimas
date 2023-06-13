@@ -19,6 +19,9 @@ public class Libro {
         this.id_categoria = idCategoria;
     }
 
+    public Libro(String nombreLibro) {
+    }
+
 
     public int getId_libro() {
         return id_libro;
